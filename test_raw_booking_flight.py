@@ -11,35 +11,21 @@ class BookFlight(unittest.TestCase):
 
     def test_booking_flight(self):
         wd = self.wd
-        # Open home page
-        wd.get("http://newtours.demoaut.com/")
-        #Login
-        wd.find_element_by_link_text("SIGN-ON").click()
-        wd.find_element_by_name("userName").click()
-        wd.find_element_by_name("userName").clear()
-        wd.find_element_by_name("userName").send_keys("mercury")
-        wd.find_element_by_name("password").clear()
-        wd.find_element_by_name("password").send_keys("mercury")
-        wd.find_element_by_name("login").click()
-        wd.find_element_by_name("passCount").click()
-        Select(wd.find_element_by_name("passCount")).select_by_visible_text("2")
-        # select flight
-        wd.find_element_by_name("fromPort").click()
-        Select(wd.find_element_by_name("fromPort")).select_by_visible_text("Frankfurt")
-        wd.find_element_by_name("fromMonth").click()
-        wd.find_element_by_name("fromDay").click()
-        Select(wd.find_element_by_name("fromDay")).select_by_visible_text("17")
-        wd.find_element_by_name("toPort").click()
-        Select(wd.find_element_by_name("toPort")).select_by_visible_text("Paris")
-        wd.find_element_by_name("toMonth").click()
-        Select(wd.find_element_by_name("toMonth")).select_by_visible_text("April")
-        wd.find_element_by_name("toDay").click()
-        Select(wd.find_element_by_name("toDay")).select_by_visible_text("12")
-        wd.find_element_by_name("findFlights").click()
-        wd.find_element_by_xpath("(.//*[normalize-space(text()) and normalize-space(.)='Blue Skies Airlines 361'])[1]/preceding::td[1]").click()
-        wd.find_element_by_xpath("(.//*[normalize-space(text()) and normalize-space(.)='Blue Skies Airlines 361'])[1]/preceding::input[1]").click()
-        wd.find_element_by_xpath("(.//*[normalize-space(text()) and normalize-space(.)='Blue Skies Airlines 631'])[1]/preceding::input[1]").click()
-        # book a flight
+        self.open_home_page(wd)
+        self.login(wd)
+        self.select_flight(wd)
+        self.book_flight(wd)
+        self.confirm_purchase(wd)
+        self.logout(wd)
+
+    def logout(self, wd):
+        wd.find_element_by_xpath(
+            "(.//*[normalize-space(text()) and normalize-space(.)='$1177 USD'])[1]/following::img[4]").click()
+
+    def confirm_purchase(self, wd):
+        wd.find_element_by_name("buyFlights").click()
+
+    def book_flight(self, wd):
         wd.find_element_by_name("reserveFlights").click()
         wd.find_element_by_name("passFirst0").click()
         wd.find_element_by_name("passFirst0").clear()
@@ -62,7 +48,8 @@ class BookFlight(unittest.TestCase):
         wd.find_element_by_name("cc_frst_name").send_keys("Scarlett")
         wd.find_element_by_name("cc_last_name").clear()
         wd.find_element_by_name("cc_last_name").send_keys("Harrisson")
-        wd.find_element_by_xpath("(.//*[normalize-space(text()) and normalize-space(.)='Address:'])[1]/following::td[1]").click()
+        wd.find_element_by_xpath(
+            "(.//*[normalize-space(text()) and normalize-space(.)='Address:'])[1]/following::td[1]").click()
         wd.find_element_by_name("billAddress1").click()
         wd.find_element_by_name("billAddress1").clear()
         wd.find_element_by_name("billAddress1").send_keys("12 Normanby road")
@@ -76,12 +63,41 @@ class BookFlight(unittest.TestCase):
         wd.find_element_by_xpath("//div").click()
         wd.find_element_by_name("billCountry").click()
         Select(wd.find_element_by_name("billCountry")).select_by_visible_text("NEW ZEALAND")
-        #confirm purchase
-        wd.find_element_by_name("buyFlights").click()
-        #logout
-        wd.find_element_by_xpath("(.//*[normalize-space(text()) and normalize-space(.)='$1177 USD'])[1]/following::img[4]").click()
 
-    
+    def select_flight(self, wd):
+        wd.find_element_by_name("fromPort").click()
+        Select(wd.find_element_by_name("fromPort")).select_by_visible_text("Frankfurt")
+        wd.find_element_by_name("fromMonth").click()
+        wd.find_element_by_name("fromDay").click()
+        Select(wd.find_element_by_name("fromDay")).select_by_visible_text("17")
+        wd.find_element_by_name("toPort").click()
+        Select(wd.find_element_by_name("toPort")).select_by_visible_text("Paris")
+        wd.find_element_by_name("toMonth").click()
+        Select(wd.find_element_by_name("toMonth")).select_by_visible_text("April")
+        wd.find_element_by_name("toDay").click()
+        Select(wd.find_element_by_name("toDay")).select_by_visible_text("12")
+        wd.find_element_by_name("findFlights").click()
+        wd.find_element_by_xpath(
+            "(.//*[normalize-space(text()) and normalize-space(.)='Blue Skies Airlines 361'])[1]/preceding::td[1]").click()
+        wd.find_element_by_xpath(
+            "(.//*[normalize-space(text()) and normalize-space(.)='Blue Skies Airlines 361'])[1]/preceding::input[1]").click()
+        wd.find_element_by_xpath(
+            "(.//*[normalize-space(text()) and normalize-space(.)='Blue Skies Airlines 631'])[1]/preceding::input[1]").click()
+
+    def login(self, wd):
+        wd.find_element_by_link_text("SIGN-ON").click()
+        wd.find_element_by_name("userName").click()
+        wd.find_element_by_name("userName").clear()
+        wd.find_element_by_name("userName").send_keys("mercury")
+        wd.find_element_by_name("password").clear()
+        wd.find_element_by_name("password").send_keys("mercury")
+        wd.find_element_by_name("login").click()
+        wd.find_element_by_name("passCount").click()
+        Select(wd.find_element_by_name("passCount")).select_by_visible_text("2")
+
+    def open_home_page(self, wd):
+        wd.get("http://newtours.demoaut.com/")
+
     def tearDown(self):
         self.wd.quit()
 
