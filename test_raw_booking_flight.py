@@ -12,9 +12,25 @@ class BookFlight(unittest.TestCase):
     def test_booking_flight(self):
         wd = self.wd
         self.open_home_page(wd)
-        self.login(wd)
-        self.select_flight(wd)
-        self.book_flight(wd)
+        self.login(wd, username="mercury", password="mercury")
+        self.select_flight(wd, departure_from="Frankfurt",
+                           fromdate="17",
+                           arriving_to="Paris",
+                           returnmonth="April",
+                           returndate="12")
+        self.book_flight(wd, firstname="Scarlett",
+                         lastname="Harrisson",
+                         mealpreference="Vegetarian",
+                         cardtype="Visa",
+                         cardnumber="5678934756759",
+                         dateexpiration="02",
+                         yearexpiration="2010",
+                         cc_firstname="Scarlett",
+                         cc_lastname="Harrisson",
+                         address="12 Normanby road",
+                         city="Wellingto",
+                         zipcode="3192",
+                         country="NEW ZEALAND")
         self.confirm_purchase(wd)
         self.logout(wd)
 
@@ -25,57 +41,58 @@ class BookFlight(unittest.TestCase):
     def confirm_purchase(self, wd):
         wd.find_element_by_name("buyFlights").click()
 
-    def book_flight(self, wd):
+    def book_flight(self, wd, firstname, lastname, mealpreference, cardtype, cardnumber, dateexpiration, yearexpiration,
+                    cc_firstname, cc_lastname, address, city, zipcode, country):
         wd.find_element_by_name("reserveFlights").click()
         wd.find_element_by_name("passFirst0").click()
         wd.find_element_by_name("passFirst0").clear()
-        wd.find_element_by_name("passFirst0").send_keys("Scarlett")
+        wd.find_element_by_name("passFirst0").send_keys(firstname)
         wd.find_element_by_name("passLast0").clear()
-        wd.find_element_by_name("passLast0").send_keys("Harrisson")
+        wd.find_element_by_name("passLast0").send_keys(lastname)
         wd.find_element_by_name("pass.0.meal").click()
-        Select(wd.find_element_by_name("pass.0.meal")).select_by_visible_text("Vegetarian")
+        Select(wd.find_element_by_name("pass.0.meal")).select_by_visible_text(mealpreference)
         wd.find_element_by_name("creditCard").click()
-        Select(wd.find_element_by_name("creditCard")).select_by_visible_text("Visa")
+        Select(wd.find_element_by_name("creditCard")).select_by_visible_text(cardtype)
         wd.find_element_by_name("creditnumber").click()
         wd.find_element_by_name("creditnumber").clear()
-        wd.find_element_by_name("creditnumber").send_keys("5678934756759")
+        wd.find_element_by_name("creditnumber").send_keys(cardnumber)
         wd.find_element_by_name("cc_exp_dt_mn").click()
-        Select(wd.find_element_by_name("cc_exp_dt_mn")).select_by_visible_text("02")
+        Select(wd.find_element_by_name("cc_exp_dt_mn")).select_by_visible_text(dateexpiration)
         wd.find_element_by_name("cc_exp_dt_yr").click()
-        Select(wd.find_element_by_name("cc_exp_dt_yr")).select_by_visible_text("2010")
+        Select(wd.find_element_by_name("cc_exp_dt_yr")).select_by_visible_text(yearexpiration)
         wd.find_element_by_name("cc_frst_name").click()
         wd.find_element_by_name("cc_frst_name").clear()
-        wd.find_element_by_name("cc_frst_name").send_keys("Scarlett")
+        wd.find_element_by_name("cc_frst_name").send_keys(cc_firstname)
         wd.find_element_by_name("cc_last_name").clear()
-        wd.find_element_by_name("cc_last_name").send_keys("Harrisson")
+        wd.find_element_by_name("cc_last_name").send_keys(cc_lastname)
         wd.find_element_by_xpath(
             "(.//*[normalize-space(text()) and normalize-space(.)='Address:'])[1]/following::td[1]").click()
         wd.find_element_by_name("billAddress1").click()
         wd.find_element_by_name("billAddress1").clear()
-        wd.find_element_by_name("billAddress1").send_keys("12 Normanby road")
+        wd.find_element_by_name("billAddress1").send_keys(address)
         wd.find_element_by_name("billCity").clear()
-        wd.find_element_by_name("billCity").send_keys("Wellingto")
+        wd.find_element_by_name("billCity").send_keys(city)
         wd.find_element_by_name("billState").clear()
         wd.find_element_by_name("billState").send_keys("")
         wd.find_element_by_name("billZip").click()
         wd.find_element_by_name("billZip").clear()
-        wd.find_element_by_name("billZip").send_keys("3192")
+        wd.find_element_by_name("billZip").send_keys(zipcode)
         wd.find_element_by_xpath("//div").click()
         wd.find_element_by_name("billCountry").click()
-        Select(wd.find_element_by_name("billCountry")).select_by_visible_text("NEW ZEALAND")
+        Select(wd.find_element_by_name("billCountry")).select_by_visible_text(country)
 
-    def select_flight(self, wd):
+    def select_flight(self, wd, departure_from, fromdate, arriving_to, returnmonth, returndate):
         wd.find_element_by_name("fromPort").click()
-        Select(wd.find_element_by_name("fromPort")).select_by_visible_text("Frankfurt")
+        Select(wd.find_element_by_name("fromPort")).select_by_visible_text(departure_from)
         wd.find_element_by_name("fromMonth").click()
         wd.find_element_by_name("fromDay").click()
-        Select(wd.find_element_by_name("fromDay")).select_by_visible_text("17")
+        Select(wd.find_element_by_name("fromDay")).select_by_visible_text(fromdate)
         wd.find_element_by_name("toPort").click()
-        Select(wd.find_element_by_name("toPort")).select_by_visible_text("Paris")
+        Select(wd.find_element_by_name("toPort")).select_by_visible_text(arriving_to)
         wd.find_element_by_name("toMonth").click()
-        Select(wd.find_element_by_name("toMonth")).select_by_visible_text("April")
+        Select(wd.find_element_by_name("toMonth")).select_by_visible_text(returnmonth)
         wd.find_element_by_name("toDay").click()
-        Select(wd.find_element_by_name("toDay")).select_by_visible_text("12")
+        Select(wd.find_element_by_name("toDay")).select_by_visible_text(returndate)
         wd.find_element_by_name("findFlights").click()
         wd.find_element_by_xpath(
             "(.//*[normalize-space(text()) and normalize-space(.)='Blue Skies Airlines 361'])[1]/preceding::td[1]").click()
@@ -84,13 +101,13 @@ class BookFlight(unittest.TestCase):
         wd.find_element_by_xpath(
             "(.//*[normalize-space(text()) and normalize-space(.)='Blue Skies Airlines 631'])[1]/preceding::input[1]").click()
 
-    def login(self, wd):
+    def login(self, wd, username, password):
         wd.find_element_by_link_text("SIGN-ON").click()
         wd.find_element_by_name("userName").click()
         wd.find_element_by_name("userName").clear()
-        wd.find_element_by_name("userName").send_keys("mercury")
+        wd.find_element_by_name("userName").send_keys(username)
         wd.find_element_by_name("password").clear()
-        wd.find_element_by_name("password").send_keys("mercury")
+        wd.find_element_by_name("password").send_keys(password)
         wd.find_element_by_name("login").click()
         wd.find_element_by_name("passCount").click()
         Select(wd.find_element_by_name("passCount")).select_by_visible_text("2")
