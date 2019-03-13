@@ -7,10 +7,11 @@ import unittest
 class BookFlight(unittest.TestCase):
     def setUp(self):
         self.wd = webdriver.Firefox()
-        self.wd.implicitly_wait(30)
+        self.wd.implicitly_wait(100)
 
     def test_booking_flight(self):
         wd = self.wd
+        # Open home page
         wd.get("http://newtours.demoaut.com/")
         #Login
         wd.find_element_by_link_text("SIGN-ON").click()
@@ -22,6 +23,7 @@ class BookFlight(unittest.TestCase):
         wd.find_element_by_name("login").click()
         wd.find_element_by_name("passCount").click()
         Select(wd.find_element_by_name("passCount")).select_by_visible_text("2")
+        # select flight
         wd.find_element_by_name("fromPort").click()
         Select(wd.find_element_by_name("fromPort")).select_by_visible_text("Frankfurt")
         wd.find_element_by_name("fromMonth").click()
@@ -37,6 +39,7 @@ class BookFlight(unittest.TestCase):
         wd.find_element_by_xpath("(.//*[normalize-space(text()) and normalize-space(.)='Blue Skies Airlines 361'])[1]/preceding::td[1]").click()
         wd.find_element_by_xpath("(.//*[normalize-space(text()) and normalize-space(.)='Blue Skies Airlines 361'])[1]/preceding::input[1]").click()
         wd.find_element_by_xpath("(.//*[normalize-space(text()) and normalize-space(.)='Blue Skies Airlines 631'])[1]/preceding::input[1]").click()
+        # book a flight
         wd.find_element_by_name("reserveFlights").click()
         wd.find_element_by_name("passFirst0").click()
         wd.find_element_by_name("passFirst0").clear()
@@ -73,7 +76,9 @@ class BookFlight(unittest.TestCase):
         wd.find_element_by_xpath("//div").click()
         wd.find_element_by_name("billCountry").click()
         Select(wd.find_element_by_name("billCountry")).select_by_visible_text("NEW ZEALAND")
+        #confirm purchase
         wd.find_element_by_name("buyFlights").click()
+        #logout
         wd.find_element_by_xpath("(.//*[normalize-space(text()) and normalize-space(.)='$1177 USD'])[1]/following::img[4]").click()
 
     
