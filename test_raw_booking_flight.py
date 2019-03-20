@@ -12,7 +12,6 @@ class BookFlight(unittest.TestCase):
 
     def test_booking_flight(self):
         wd = self.wd
-        self.open_home_page(wd)
         self.login(wd, username="mercury", password="mercury")
         self.select_flight(wd, Flight(departure_from="Frankfurt",
                            fromdate="17",
@@ -32,7 +31,6 @@ class BookFlight(unittest.TestCase):
                          city="Wellingto",
                          zipcode="3192",
                          country="NEW ZEALAND"))
-        self.confirm_purchase(wd)
         self.logout(wd)
 
     def logout(self, wd):
@@ -83,6 +81,7 @@ class BookFlight(unittest.TestCase):
         wd.find_element_by_xpath("//div").click()
         wd.find_element_by_name("billCountry").click()
         Select(wd.find_element_by_name("billCountry")).select_by_visible_text(payment.country)
+        self.confirm_purchase(wd)
 
     def select_flight(self, wd, flight_details):
         #select flight from
@@ -107,6 +106,7 @@ class BookFlight(unittest.TestCase):
             "(.//*[normalize-space(text()) and normalize-space(.)='Blue Skies Airlines 631'])[1]/preceding::input[1]").click()
 
     def login(self, wd, username, password):
+        self.open_home_page(wd)
         wd.find_element_by_link_text("SIGN-ON").click()
         wd.find_element_by_name("userName").click()
         wd.find_element_by_name("userName").clear()
