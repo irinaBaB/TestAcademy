@@ -3,6 +3,8 @@ import pytest
 from flight_details import Flight
 from flight_details import Payment
 from application import Application
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 
 
 @pytest.fixture
@@ -32,4 +34,9 @@ def test_booking_flight(app):
                             city="Wellingto",
                             zipcode="3192",
                             country="NEW ZEALAND"))
+    assert(app.is_text_present("itinerary has been booked!"))
+
+    assert(app.if_regex_present("Your \W +itinerary has been booked!"))
+
+
     app.logout()

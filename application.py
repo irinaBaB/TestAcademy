@@ -1,5 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
+import re
+from selenium.common.exceptions import NoSuchElementException
 
 
 class Application:
@@ -100,6 +102,12 @@ class Application:
     def open_home_page(self):
         wd = self.wd
         wd.get("http://newtours.demoaut.com/")
+
+    def is_text_present(self, text):
+        return text in self.wd.page_source
+
+    def if_regex_present(self, text):
+        return re.search(text, self.wd.page_source)
 
     def destroy(self):
         self.wd.quit()
