@@ -10,16 +10,14 @@ class TestFlightBooking(unittest.TestCase):
         self.wd.implicitly_wait(30)
 
     def test_flight_booking(self):
-        wd = self.wd
-        self.open_home_page(wd)
-        self.login(wd, username="mercury", password="mercury")
-        self.flight_booking(wd, from_port="London",
+        self.login(username="mercury", password="mercury")
+        self.flight_booking(from_port="London",
                                 departure_month="April",
                                 departure_date="7",
                                 to_port="New York",
                                 return_month= "April",
                                 return_date= "20")
-        self.flight_purchase(wd, pas_first_name="helen",
+        self.flight_purchase(pas_first_name="helen",
                                  pas_last_name="conor",
                                  meal_option="Vegetarian",
                                  cc_type="Visa",
@@ -30,14 +28,16 @@ class TestFlightBooking(unittest.TestCase):
                                  city="auckland",
                                  zip_code="3192",
                                  country="NEW ZEALAND")
-        self.logout(wd)
+        self.logout()
 
-    def logout(self, wd):
+    def logout(self):
+        wd = self.wd
         wd.find_element_by_xpath(
             "(.//*[normalize-space(text()) and normalize-space(.)='$588 USD'])[1]/following::img[4]").click()
 
-    def flight_purchase(self, wd, pas_first_name, pas_last_name, meal_option, cc_type, cc_number, cc_exp_month,
+    def flight_purchase(self, pas_first_name, pas_last_name, meal_option, cc_type, cc_number, cc_exp_month,
                         cc_exp_year, bill_address, city, zip_code, country):
+        wd = self.wd
         wd.find_element_by_name("reserveFlights").click()
         wd.find_element_by_name("passFirst0").click()
         wd.find_element_by_name("passFirst0").clear()
@@ -76,7 +76,8 @@ class TestFlightBooking(unittest.TestCase):
         Select(wd.find_element_by_name("billCountry")).select_by_visible_text(country)
         wd.find_element_by_name("buyFlights").click()
 
-    def flight_booking(self, wd, from_port, departure_month, departure_date, to_port, return_month, return_date):
+    def flight_booking(self, from_port, departure_month, departure_date, to_port, return_month, return_date):
+        wd = self.wd
         wd.find_element_by_name("tripType").click()
         wd.find_element_by_xpath("//select[@name='passCount']").click()
         wd.find_element_by_name("passCount").click()
@@ -105,7 +106,9 @@ class TestFlightBooking(unittest.TestCase):
         wd.find_element_by_xpath(
             "(.//*[normalize-space(text()) and normalize-space(.)='Blue Skies Airlines 631'])[1]/preceding::input[1]").click()
 
-    def login(self, wd, username, password):
+    def login(self, username, password):
+        wd = self.wd
+        self.open_home_page()
         wd.find_element_by_name("userName").click()
         wd.find_element_by_name("userName").clear()
         wd.find_element_by_name("userName").send_keys(username)
@@ -113,7 +116,8 @@ class TestFlightBooking(unittest.TestCase):
         wd.find_element_by_name("password").send_keys(password)
         wd.find_element_by_name("login").click()
 
-    def open_home_page(self, wd):
+    def open_home_page(self):
+        wd = self.wd
         wd.get("http://newtours.demoaut.com/mercurysignon.php")
 
     def tearDown(self):
