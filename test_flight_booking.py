@@ -7,8 +7,8 @@ import unittest
 class TestFlightBooking(unittest.TestCase):
     def setUp(self):
         self.driver = webdriver.Chrome(executable_path='drivers/chromedriver')
-        self.driver.implicitly_wait(60)
-    
+        self.driver.implicitly_wait(30)
+
     def test_flight_booking(self):
         driver = self.driver
         driver.get("http://newtours.demoaut.com/mercurysignon.php")
