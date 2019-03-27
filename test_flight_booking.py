@@ -2,7 +2,8 @@
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 import unittest
-
+from flight_details import Booking
+from flight_details import Payment
 
 class TestFlightBooking(unittest.TestCase):
     def setUp(self):
@@ -11,13 +12,13 @@ class TestFlightBooking(unittest.TestCase):
 
     def test_flight_booking(self):
         self.login(username="mercury", password="mercury")
-        self.flight_booking(from_port="London",
+        self.flight_booking(Booking(from_port="London",
                                 departure_month="April",
                                 departure_date="7",
                                 to_port="New York",
                                 return_month= "April",
-                                return_date= "20")
-        self.flight_purchase(pas_first_name="helen",
+                                return_date= "20"))
+        self.flight_purchase(Payment(pas_first_name="helen",
                                  pas_last_name="conor",
                                  meal_option="Vegetarian",
                                  cc_type="Visa",
@@ -27,7 +28,7 @@ class TestFlightBooking(unittest.TestCase):
                                  bill_address="12 Normanbyroad",
                                  city="auckland",
                                  zip_code="3192",
-                                 country="NEW ZEALAND")
+                                 country="NEW ZEALAND"))
         self.logout()
 
     def logout(self):
@@ -35,35 +36,34 @@ class TestFlightBooking(unittest.TestCase):
         wd.find_element_by_xpath(
             "(.//*[normalize-space(text()) and normalize-space(.)='$588 USD'])[1]/following::img[4]").click()
 
-    def flight_purchase(self, pas_first_name, pas_last_name, meal_option, cc_type, cc_number, cc_exp_month,
-                        cc_exp_year, bill_address, city, zip_code, country):
+    def flight_purchase(self, payment):
         wd = self.wd
         wd.find_element_by_name("reserveFlights").click()
         wd.find_element_by_name("passFirst0").click()
         wd.find_element_by_name("passFirst0").clear()
-        wd.find_element_by_name("passFirst0").send_keys(pas_first_name)
+        wd.find_element_by_name("passFirst0").send_keys(payment.pas_first_name)
         wd.find_element_by_name("passLast0").clear()
-        wd.find_element_by_name("passLast0").send_keys(pas_last_name)
+        wd.find_element_by_name("passLast0").send_keys(payment.pas_last_name)
         wd.find_element_by_name("pass.0.meal").click()
-        Select(wd.find_element_by_name("pass.0.meal")).select_by_visible_text(meal_option)
+        Select(wd.find_element_by_name("pass.0.meal")).select_by_visible_text(payment.meal_option)
         wd.find_element_by_name("creditCard").click()
-        Select(wd.find_element_by_name("creditCard")).select_by_visible_text(cc_type)
+        Select(wd.find_element_by_name("creditCard")).select_by_visible_text(payment.cc_type)
         wd.find_element_by_name("creditnumber").click()
         wd.find_element_by_name("creditnumber").clear()
-        wd.find_element_by_name("creditnumber").send_keys(cc_number)
+        wd.find_element_by_name("creditnumber").send_keys(payment.cc_number)
         wd.find_element_by_name("cc_exp_dt_mn").click()
-        Select(wd.find_element_by_name("cc_exp_dt_mn")).select_by_visible_text(cc_exp_month)
+        Select(wd.find_element_by_name("cc_exp_dt_mn")).select_by_visible_text(payment.cc_exp_month)
         wd.find_element_by_name("cc_exp_dt_yr").click()
-        Select(wd.find_element_by_name("cc_exp_dt_yr")).select_by_visible_text(cc_exp_year)
+        Select(wd.find_element_by_name("cc_exp_dt_yr")).select_by_visible_text(payment.cc_exp_year)
         wd.find_element_by_name("cc_frst_name").click()
         # billing address
         wd.find_element_by_xpath(
             "(.//*[normalize-space(text()) and normalize-space(.)='Billing Address'])[1]/following::tr[1]").click()
         wd.find_element_by_name("billAddress1").clear()
-        wd.find_element_by_name("billAddress1").send_keys(bill_address)
+        wd.find_element_by_name("billAddress1").send_keys(payment.bill_address)
         wd.find_element_by_name("billCity").click()
         wd.find_element_by_name("billCity").clear()
-        wd.find_element_by_name("billCity").send_keys(city)
+        wd.find_element_by_name("billCity").send_keys(payment.city)
         wd.find_element_by_xpath(
             "(.//*[normalize-space(text()) and normalize-space(.)='State/Province:'])[1]/following::td[1]").click()
         wd.find_element_by_name("billState").click()
@@ -71,30 +71,30 @@ class TestFlightBooking(unittest.TestCase):
         wd.find_element_by_name("billState").send_keys("")
         wd.find_element_by_name("billZip").click()
         wd.find_element_by_name("billZip").clear()
-        wd.find_element_by_name("billZip").send_keys(zip_code)
+        wd.find_element_by_name("billZip").send_keys(payment.zip_code)
         wd.find_element_by_name("billCountry").click()
-        Select(wd.find_element_by_name("billCountry")).select_by_visible_text(country)
+        Select(wd.find_element_by_name("billCountry")).select_by_visible_text(payment.country)
         wd.find_element_by_name("buyFlights").click()
 
-    def flight_booking(self, from_port, departure_month, departure_date, to_port, return_month, return_date):
+    def flight_booking(self, booking):
         wd = self.wd
         wd.find_element_by_name("tripType").click()
         wd.find_element_by_xpath("//select[@name='passCount']").click()
         wd.find_element_by_name("passCount").click()
         # from port
         wd.find_element_by_name("fromPort").click()
-        Select(wd.find_element_by_name("fromPort")).select_by_visible_text(from_port)
+        Select(wd.find_element_by_name("fromPort")).select_by_visible_text(booking.from_port)
         wd.find_element_by_name("fromMonth").click()
-        Select(wd.find_element_by_name("fromMonth")).select_by_visible_text(departure_month)
+        Select(wd.find_element_by_name("fromMonth")).select_by_visible_text(booking.departure_month)
         wd.find_element_by_name("fromDay").click()
-        Select(wd.find_element_by_name("fromDay")).select_by_visible_text(departure_date)
+        Select(wd.find_element_by_name("fromDay")).select_by_visible_text(booking.departure_date)
         wd.find_element_by_name("toPort").click()
         # to destionation
-        Select(wd.find_element_by_name("toPort")).select_by_visible_text(to_port)
+        Select(wd.find_element_by_name("toPort")).select_by_visible_text(booking.to_port)
         wd.find_element_by_name("toMonth").click()
-        Select(wd.find_element_by_name("toMonth")).select_by_visible_text(return_month)
+        Select(wd.find_element_by_name("toMonth")).select_by_visible_text(booking.return_month)
         wd.find_element_by_name("toDay").click()
-        Select(wd.find_element_by_name("toDay")).select_by_visible_text(return_date)
+        Select(wd.find_element_by_name("toDay")).select_by_visible_text(booking.return_date)
         # select airline
         wd.find_element_by_xpath(
             "(.//*[normalize-space(text()) and normalize-space(.)='Airline:'])[1]/preceding::input[2]").click()
